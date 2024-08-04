@@ -7,8 +7,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Supabaseの初期化
-supabase_url = "https://nnomgnwlsgnundohnpdm.supabase.co"
-supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ub21nbndsc2dudW5kb2hucGRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI1MjU3NDUsImV4cCI6MjAzODEwMTc0NX0.Ss_GMgsz-MLGFuMEQBLSnfHi4wWlgeAjoRqWfeX8CdQ"
+supabase_url = "https://ziisqwpmtnxkdfplpunb.supabase.co"
+supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppaXNxd3BtdG54a2RmcGxwdW5iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjI3NTI0NjgsImV4cCI6MjAzODMyODQ2OH0.edKvDKjOuyYvi24cNiE6K91jwJYa9XpMEg34G2uDNm0"
 supabase: Client = create_client(supabase_url, supabase_key)
 
 # Bluetooth信号強度の計算
@@ -44,7 +44,7 @@ def fetch_signal_strengths(target_device):
 # Bluetooth情報の取得ルート
 @app.route('/bluetooth', methods=['GET'])
 def bluetooth_info():
-    return render_template('bluetooth.html')
+    return render_template('bluetooth2.html')
 
 # Bluetoothデータの取得ルート
 @app.route('/bluetooth_data', methods=['POST'])
@@ -59,7 +59,7 @@ def bluetooth_data():
             "user_name": data.get('user_name'),
             "mac_address": device_address
         }
-        response = supabase.table("Bluetooth").insert(db_data).execute()
+        response = supabase.table("pbl5").insert(db_data).execute()
     else:
         print("No signal strengths found to save to the database")
     
@@ -68,7 +68,7 @@ def bluetooth_data():
 # Bluetoothデバイスリストの取得ルート
 @app.route('/devices', methods=['GET'])
 def devices():
-    devices = supabase.table("Bluetooth").select("*").execute()
+    devices = supabase.table("pbl5").select("*").execute()
     return jsonify(devices.data)
 
 @app.route('/')
