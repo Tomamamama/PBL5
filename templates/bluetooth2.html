@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluetooth Device Explorer</title>
+</head>
+<body>
+    <h1>Bluetooth Device Explorer</h1>
+    <form id="bluetooth-form">
+        <label for="user_name">Enter User Name:</label>
+        <input type="text" id="user_name" name="user_name" required>
+        <label for="mac_address">Enter MAC Address:</label>
+        <input type="text" id="mac_address" name="mac_address" required>
+        <button type="submit">Discover Device</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('bluetooth-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const userName = document.getElementById('user_name').value;
+            const macAddress = document.getElementById('mac_address').value;
+
+            const response = await fetch('/bluetooth_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_name: userName, mac_address: macAddress })
+            });
+
+            const result = await response.json();
+            const resultDiv = document.getElementById('result');
+
+            if (Object.keys(result).length > 0) {
+                const deviceData = result[macAddress];
+                resultDiv.innerHTML = `
+                    <h2>Device Information</h2>
+                    <p><strong>MAC Address:</strong> ${macAddress}</p>
+                    <p><strong>RSSI:</strong> ${deviceData.rssi} dBm</p>
+                    <p><strong>Distance:</strong> ${deviceData.distance.toFixed(2)} meters</p>
+                `;
+            } else {
+                resultDiv.innerHTML = '<p>No device found with the specified MAC address.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
